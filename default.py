@@ -21,8 +21,8 @@ except:
 __plugin__ = "Canada On Demand"
 __author__ = 'Andre,Renaud  {andrepleblanc,renaudtrudel}@gmail.com'
 __url__ = 'http://xbmcaddons.com/addons/plugin.video.canada.on.demand/'
-__date__ = '05-03-2014'
-__version__ = '0.8.6'
+__date__ = '22-09-2018'
+__version__ = '0.8.7'
 __settings__ = xbmcaddon.Addon(id='plugin.video.canada.on.demand')
 
 

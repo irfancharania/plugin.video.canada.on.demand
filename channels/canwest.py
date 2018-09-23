@@ -8,7 +8,7 @@ except ImportError:
 
 class CanwestBaseChannel(ThePlatformBaseChannel):
     is_abstract = True
-    base_url = 'http://feeds.theplatform.com/ps/JSON/PortalService/2.2/'
+    base_url = 'https://feeds.theplatform.com/ps/JSON/PortalService/2.2/'
     PID = None
     root_depth = 1
 
@@ -159,16 +159,22 @@ class GlobalNews(CanwestBaseChannel):
 
         # using RSS cuz json was not working
         # json.loads was complaining
-        platform_url = 'http://feed.theplatform.com/f/dtjsEC/FCT_FJTDVpVT?form=rss&byId=%s'
+        platform_url = 'https://feed.theplatform.com/f/dtjsEC/2zyoPEJ2FCp7?form=rss&byId=%s'
 
         soup = BeautifulSoup(self.plugin.fetch(self.args['remote_url'], max_age=self.cache_timeout))
         eplist = soup.find('ul', 'video-browse-container').findAll('li')
 
-        #logging.debug(eplist)
+        # logging.debug(eplist)
 
         for ep in eplist:
             spans = ep.findAll('span')
+            
             duration = spans[len(spans)-1].string
+            try:
+                x = time.strptime(date_string, '%M:%S')
+            except ValueError:
+                x = time.strptime(date_string, '%H:%M:%S')
+            duration_seconds = datetime.timedelta(minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
 
             tagline = ep.a['title']
 
@@ -201,9 +207,10 @@ class GlobalNews(CanwestBaseChannel):
 
         data = self.plugin.fetch(self.args['remote_url'], self.cache_timeout).read()
         soup = BeautifulStoneSoup(data)
-        content = soup.find('media:content')
+        content = soup.find('plfile:downloadurl')
 
-        url = content['url']
+        logging.debug (content)
+        url = content.contents[0]
         logging.debug (url)
 
         return self.plugin.set_stream_url(url)
