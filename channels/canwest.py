@@ -171,9 +171,9 @@ class GlobalNews(CanwestBaseChannel):
             
             duration = spans[len(spans)-1].string
             try:
-                x = time.strptime(date_string, '%M:%S')
+                x = time.strptime(duration, '%M:%S')
             except ValueError:
-                x = time.strptime(date_string, '%H:%M:%S')
+                x = time.strptime(duration, '%H:%M:%S')
             duration_seconds = datetime.timedelta(minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
 
             tagline = ep.a['title']
@@ -192,7 +192,7 @@ class GlobalNews(CanwestBaseChannel):
                 'action': 'play_episode',
                 'entry_id': None,
             	'Title': tagline,
-            	'Duration' : duration,
+            	'Duration' : duration_seconds,
             	'Thumb' : thumb,
             	'tagline': tagline,
             	'remote_url': platform_url % ep.findAll('span')[1]['data-v_count_id']
